@@ -5,12 +5,12 @@ import { useApiParams } from "../../../services/mongoService";
 const appMiddleware = store => next => action => {
   switch (action.type) {
     case "GET_URL_PARAMS": {
-      const { start, userID } = action.payload;
+      const { start, userId } = action.payload;
       const { postUserData } = useApiParams();
 
       postUserData({
         token: start,
-        user: userID
+        user: userId
       }).then(res => {
         res && store.dispatch(addRoleAction(res));
       });

@@ -28,7 +28,7 @@ export default function reducer(
       return {
         ...state,
         token: action.payload.start,
-        user: action.payload.userID
+        user: action.payload.userId
       };
     }
     case ADD_ROLE: {
