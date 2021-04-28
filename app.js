@@ -9,12 +9,12 @@ const mongoUrl =
 
 app.use(express.json({ extended: true }));
 app.use("/api/session", require("./routes"));
-if (process.env.NODE_ENV === "production") {
-  app.use("/", express.static(path.join(__dirname, "game", "build")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "game", "build", "index.html"));
-  });
-}
+
+app.use("/", express.static(path.join(__dirname, "game", "build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "game", "build", "index.html"));
+});
+
 app.listen(PORT, () => {});
 
 const init = async () => {
