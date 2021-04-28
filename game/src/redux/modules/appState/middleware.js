@@ -5,16 +5,16 @@ import { useApiParams } from "../../../services/mongoService";
 const appMiddleware = store => next => action => {
   switch (action.type) {
     case "GET_URL_PARAMS": {
-      const { start, userId } = action.payload;
+      const { token, user } = action.payload;
       const { postUserData } = useApiParams();
 
       postUserData({
-        token: start,
-        user: userId
+        token: token,
+        user: user
       }).then(res => {
         res && store.dispatch(addRoleAction(res));
       });
-      store.dispatch(startGameAction(start));
+      store.dispatch(startGameAction(token));
 
       break;
     }

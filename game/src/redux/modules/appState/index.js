@@ -27,8 +27,8 @@ export default function reducer(
     case GET_URL_PARAMS: {
       return {
         ...state,
-        token: action.payload.start,
-        user: action.payload.userId
+        token: action.payload.token,
+        user: action.payload.user
       };
     }
     case ADD_ROLE: {
