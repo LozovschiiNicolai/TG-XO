@@ -12,7 +12,6 @@ const startData = {
   betType8: false,
   betType9: false
 };
-
 const router = Router();
 const sessionSchema = new Schema({
   token: { type: String },
@@ -21,7 +20,14 @@ const sessionSchema = new Schema({
 });
 const gameSchema = new Schema({
   token: { type: String },
-  data: { type: Object }
+  data: {
+    field: { type: Object },
+    moveRole: { type: String }
+  },
+  repeat: {
+    master: { type: Boolean },
+    guest: { type: Boolean }
+  }
 });
 
 const SessionModel = model("Session", sessionSchema);
@@ -30,9 +36,18 @@ const GameModel = model("Game", gameSchema);
 router.post("/SessionStart", async (req, res) => {
   try {
     const { token, user } = req.body;
-
     const newSession = new SessionModel({ token, user });
-    const newGame = new GameModel({ token, data: startData });
+    const newGame = new GameModel({
+      token,
+      data: {
+        field: startData,
+        moveRole: "master",
+        repeat: {
+          master: false,
+          guest: false
+        }
+      }
+    });
     const activeSession = await SessionModel.findOne({ token: token });
 
     if (!activeSession) {
@@ -59,8 +74,51 @@ router.post("/SessionStart", async (req, res) => {
 router.post("/GameUpdate", async (req, res) => {
   try {
     const { token } = req.body;
-    const result = await GameModel.findOne({ token: token }).exec();
+    let result = await GameModel.findOne({ token: token }).exec();
+    if (result.repeat.master && result.repeat.guest) {
+      let newMoveRole = Math.random() < 0.5 ? "guest" : "master";
+      await GameModel.findOneAndUpdate(
+        { token: token },
+        {
+          data: { field: startData, moveRole: newMoveRole },
+          repeat: {
+            master: false,
+            guest: false
+          }
+        },
+        { useFindAndModify: false }
+      );
+    }
     res.send(result);
+  } catch {
+    res.status(500).json({ message: "error" });
+  }
+});
+
+router.post("/MakeMove", async (req, res) => {
+  try {
+    const { data, token } = req.body;
+    await GameModel.findOneAndUpdate(
+      { token: token },
+      { data: data },
+      { useFindAndModify: false }
+    );
+    res.send({ message: "move" });
+  } catch {
+    res.status(500).json({ message: "error" });
+  }
+});
+
+router.post("/RepeatRound", async (req, res) => {
+  try {
+    const { token, role } = req.body;
+    const model = await GameModel.findOne({ token: token }).exec();
+    await GameModel.findOneAndUpdate(
+      { token: token },
+      { repeat: { ...model.repeat, ...{ [role]: true } } },
+      { useFindAndModify: false }
+    );
+    res.send({ message: "repeat" });
   } catch {
     res.status(500).json({ message: "error" });
   }

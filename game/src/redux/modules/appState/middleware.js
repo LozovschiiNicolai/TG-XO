@@ -18,7 +18,12 @@ const appMiddleware = store => next => action => {
 
       break;
     }
-
+    case "REPEAT_ROUND": {
+      const { token, role } = store.getState().app;
+      const { postRepeatRound } = useApiParams();
+      postRepeatRound({ token, role });
+      break;
+    }
     default:
   }
 

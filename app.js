@@ -21,7 +21,8 @@ const init = async () => {
   try {
     await mongoose.connect(mongoUrl, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      useFindAndModify: true
     });
   } catch (e) {
     console.log(e.message);

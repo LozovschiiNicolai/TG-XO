@@ -18,5 +18,11 @@ export const useApiParams = () => {
   const getGameData = async body =>
     await request("/api/session/GameUpdate", "POST", body);
 
-  return { postUserData, getGameData };
+  const postMoveData = async body =>
+    await request("/api/session/MakeMove", "POST", body);
+
+  const postRepeatRound = async body =>
+    await request("/api/session/RepeatRound", "POST", body);
+
+  return { postUserData, getGameData, postMoveData, postRepeatRound };
 };
