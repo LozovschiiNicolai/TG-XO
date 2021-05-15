@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { StatusText } from "./commonStatus/";
 
 const Wrapper = styled.div`
-  text-align: center;
-  font-size: 1.5em;
-  text-transform: uppercase;
-  font-family: sans-serif;
-  font-weight: bold;
-  color: red;
+  height: 15%;
+  display: flex;
+  align-items: center;
 `;
 
 const Status = () => {
@@ -28,7 +26,7 @@ const Status = () => {
         res = "Ход противника";
       }
     } else {
-      if (winResult === role) {
+      if (winResult.res === role) {
         res = "Победа!";
       } else {
         res = "В другой раз!";
@@ -36,6 +34,10 @@ const Status = () => {
     }
     setStatus(res);
   }, [winResult, role, moveRole]);
-  return <Wrapper>{status}</Wrapper>;
+  return (
+    <Wrapper>
+      <StatusText>{status}</StatusText>
+    </Wrapper>
+  );
 };
 export default Status;

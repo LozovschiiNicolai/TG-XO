@@ -1,30 +1,33 @@
 import React from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { makeMoveAction } from "../../redux/modules/gameState";
-import Icon from "../icon";
+import styled, { keyframes } from "styled-components";
+import { useSelector } from "react-redux";
+import Field from "./field";
+import ResultLine from "./resultLine";
 
-const Grid = styled.div`
-  background: ${({ winResult }) => (winResult ? "red" : "gray")};
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  grid-gap: 1em;
-  height: 50vh;
-  border: 1px solid;
-`;
-const Item = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: white;
-  pointer-events: ${({ active }) => (active ? "all" : "none")};
-  & svg {
-    height: ${({ result }) => (result === "y" ? "37%" : "30%")};
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 `;
+const Wrapper = styled.div`
+  width: 90%;
+  height: 50%;
+`;
+
+const Grid = styled.svg`
+  width: 100%;
+  height: 100%;
+  & line {
+    filter: drop-shadow(1px 1px 0.5px rgba(0, 0, 0, 0.25));
+  }
+  & g svg {
+    animation: 0.5s ${fadeIn} ease-out;
+  }
+`;
+
 const Body = () => {
   const { role, field, moveRole, winResult } = useSelector(state => ({
     role: state.app.role || "",
@@ -33,24 +36,19 @@ const Body = () => {
     winResult: state.app.winResult || false
   }));
 
-  const dispatch = useDispatch();
   return (
-    <Grid winResult={winResult}>
-      {Object.entries(field).map((item, i) => (
-        <Item
-          active={!item[1] && role === moveRole}
-          result={item[1].toString()}
-          onClick={() =>
-            dispatch(
-              makeMoveAction({ newMove: item[0], field, role, moveRole })
-            )
-          }
-          key={i}
-        >
-          {item[1] && <Icon icon={item[1]} />}
-        </Item>
-      ))}
-    </Grid>
+    <Wrapper>
+      <Grid viewBox="0 0 99 99">
+        <line x1="0" y1="33" x2="99" y2="33" stroke="#2d9cdb" />
+        <line x1="0" y1="66" x2="99" y2="66" stroke="#2d9cdb" />
+        <line x1="33" y1="0" x2="33" y2="99" stroke="#2d9cdb" />
+        <line x1="66" y1="0" x2="66" y2="99" stroke="#2d9cdb" />
+
+        <Field moveRole={moveRole} field={field} role={role} />
+
+        {winResult && <ResultLine winResult={winResult} role={role} />}
+      </Grid>
+    </Wrapper>
   );
 };
 export default Body;

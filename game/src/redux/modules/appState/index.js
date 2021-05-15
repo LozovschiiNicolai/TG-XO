@@ -4,19 +4,22 @@ const GET_URL_PARAMS = "GET_URL_PARAMS";
 const ADD_ROLE = "ADD_ROLE";
 const WIN_RESULT = "WIN_RESULT";
 const REPEAT_ROUND = "REPEAT_ROUND";
+const SET_SIZE = "SET_SIZE";
 
 export type Action =
   | { type: typeof GET_URL_PARAMS, payload: Object }
   | { type: typeof ADD_ROLE, payload: Object }
   | { type: typeof WIN_RESULT }
-  | { type: typeof REPEAT_ROUND };
+  | { type: typeof REPEAT_ROUND }
+  | { type: typeof SET_SIZE, payload: Object };
 
 export type State = {
   token: String,
   user: number,
   role: String,
   winResult: boolean,
-  repeatRound: boolean
+  repeatRound: boolean,
+  size: Object
 };
 
 const initialState: State = {
@@ -24,7 +27,8 @@ const initialState: State = {
   user: 0,
   role: "",
   winResult: false,
-  repeatRound: false
+  repeatRound: false,
+  size: {}
 };
 
 export default function reducer(
@@ -57,6 +61,12 @@ export default function reducer(
         repeatRound: action.payload
       };
     }
+    case SET_SIZE: {
+      return {
+        ...state,
+        size: action.payload
+      };
+    }
     default: {
       return state;
     }
@@ -80,5 +90,10 @@ export const winResultAction = (payload: String): Action => ({
 
 export const repeatRoundAction = (payload: boolean): Action => ({
   type: REPEAT_ROUND,
+  payload
+});
+
+export const setSizeAction = (payload: Object): Action => ({
+  type: SET_SIZE,
   payload
 });
