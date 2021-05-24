@@ -1,55 +1,37 @@
-const { Router } = require("express");
-const { Schema, model, Types } = require("mongoose");
-
-const startData = {
-  betType1: false,
-  betType2: false,
-  betType3: false,
-  betType4: false,
-  betType5: false,
-  betType6: false,
-  betType7: false,
-  betType8: false,
-  betType9: false
-};
-const router = Router();
-const sessionSchema = new Schema({
-  token: { type: String },
-  user: { type: String },
-  guest: { type: String }
-});
-const gameSchema = new Schema({
-  token: { type: String },
-  data: {
-    field: { type: Object },
-    moveRole: { type: String }
-  },
-  repeat: {
-    master: { type: Boolean },
-    guest: { type: Boolean }
-  }
-});
-
-const SessionModel = model("Session", sessionSchema);
-const GameModel = model("Game", gameSchema);
+const { SessionModel, GameModel, router } = require("./models");
+const { winResult, startData } = require("./winResult");
 
 router.post("/SessionStart", async (req, res) => {
   try {
-    const { token, user } = req.body;
-    const newSession = new SessionModel({ token, user });
+    const { token, user, name } = req.body;
+    const newSession = new SessionModel({
+      token,
+      user: user
+    });
     const newGame = new GameModel({
       token,
       data: {
         field: startData,
-        moveRole: "master",
-        repeat: {
-          master: false,
-          guest: false
+        moveRole: "master"
+      },
+      repeat: {
+        master: false,
+        guest: false
+      },
+      gameScore: {
+        master: {
+          name: name,
+          score: 0
         }
+      },
+      winResult: {
+        winStatus: false,
+        res: "",
+        combination: 0
       }
     });
     const activeSession = await SessionModel.findOne({ token: token });
-
+    const activeGame = await GameModel.findOne({ token: token });
     if (!activeSession) {
       await newSession.save();
       await newGame.save();
@@ -57,6 +39,15 @@ router.post("/SessionStart", async (req, res) => {
     } else {
       if (activeSession.user !== user && !activeSession.guest) {
         await SessionModel.updateOne({ token: token }, { guest: user });
+
+        const newData = {
+          ...activeGame.gameScore,
+          guest: {
+            name: name,
+            score: 0
+          }
+        };
+        await GameModel.updateOne({ token: token }, { gameScore: newData });
         res.send({ role: "guest" });
       } else {
         if (activeSession.user === user) {
@@ -74,20 +65,28 @@ router.post("/SessionStart", async (req, res) => {
 router.post("/GameUpdate", async (req, res) => {
   try {
     const { token } = req.body;
+
     let result = await GameModel.findOne({ token: token }).exec();
-    if (result.repeat.master && result.repeat.guest) {
-      let newMoveRole = Math.random() < 0.5 ? "guest" : "master";
-      await GameModel.findOneAndUpdate(
-        { token: token },
-        {
-          data: { field: startData, moveRole: newMoveRole },
-          repeat: {
-            master: false,
-            guest: false
-          }
-        },
-        { useFindAndModify: false }
-      );
+    if (result) {
+      if (result.repeat.master && result.repeat.guest) {
+        let newMoveRole = Math.random() < 0.5 ? "guest" : "master";
+        await GameModel.findOneAndUpdate(
+          { token: token },
+          {
+            data: { field: startData, moveRole: newMoveRole },
+            repeat: {
+              master: false,
+              guest: false
+            },
+            winResult: {
+              winStatus: false,
+              res: "",
+              combination: 0
+            }
+          },
+          { useFindAndModify: false }
+        );
+      }
     }
     res.send(result);
   } catch {
@@ -103,6 +102,28 @@ router.post("/MakeMove", async (req, res) => {
       { data: data },
       { useFindAndModify: false }
     );
+    let win = winResult(data.field);
+    if (win) {
+      let result = await GameModel.findOne({ token: token }).exec();
+      await GameModel.findOneAndUpdate(
+        { token: token },
+        {
+          gameScore: {
+            ...result.gameScore,
+            [win.res]: {
+              ...result.gameScore[win.res],
+              score: result.gameScore[win.res].score + 1
+            }
+          },
+          winResult: {
+            winStatus: true,
+            res: win.res,
+            combination: win.combination
+          }
+        },
+        { useFindAndModify: false }
+      );
+    }
     res.send({ message: "move" });
   } catch {
     res.status(500).json({ message: "error" });

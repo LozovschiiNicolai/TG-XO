@@ -12,13 +12,19 @@ export type Action =
 export type State = {
   data: Object,
   moveRole: String,
-  restart: boolean
+  gameScore: Object,
+  winResult: Object
 };
 
 const initialState: State = {
   field: {},
   moveRole: "master",
-  restart: false
+  gameScore: {},
+  winResult: {
+    winStatus: false,
+    res: "",
+    combination: 0
+  }
 };
 
 export default function reducer(
@@ -31,7 +37,8 @@ export default function reducer(
         ...state,
         field: action.payload.data.field,
         moveRole: action.payload.data.moveRole,
-        restart: action.payload.data.restart
+        gameScore: action.payload.gameScore,
+        winResult: action.payload.winResult
       };
     }
 

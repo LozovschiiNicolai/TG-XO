@@ -13,13 +13,13 @@ const Status = () => {
   const { role, moveRole, winResult } = useSelector(state => ({
     role: state.app.role || "",
     moveRole: state.gameState.moveRole || "",
-    winResult: state.app.winResult || false
+    winResult: state.gameState.winResult || false
   }));
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     let res = "";
-    if (!winResult) {
+    if (!winResult.winStatus) {
       if (role === moveRole) {
         res = "Твой ход";
       } else {

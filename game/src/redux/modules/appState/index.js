@@ -15,18 +15,17 @@ export type Action =
 
 export type State = {
   token: String,
-  user: number,
+  user: String,
   role: String,
-  winResult: boolean,
   repeatRound: boolean,
-  size: Object
+  size: Object,
+  gameScore: Object
 };
 
 const initialState: State = {
   token: "",
-  user: 0,
+  user: "",
   role: "",
-  winResult: false,
   repeatRound: false,
   size: {}
 };
@@ -46,13 +45,7 @@ export default function reducer(
     case ADD_ROLE: {
       return {
         ...state,
-        role: action.payload.role
-      };
-    }
-    case WIN_RESULT: {
-      return {
-        ...state,
-        winResult: action.payload
+        role: action.payload
       };
     }
     case REPEAT_ROUND: {
@@ -78,13 +71,8 @@ export const getUrlParamsAction = (payload: Object): Action => ({
   payload
 });
 
-export const addRoleAction = (payload: Object): Action => ({
+export const addRoleAction = (payload: String): Action => ({
   type: ADD_ROLE,
-  payload
-});
-
-export const winResultAction = (payload: String): Action => ({
-  type: WIN_RESULT,
   payload
 });
 

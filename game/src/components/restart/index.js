@@ -43,8 +43,9 @@ const Button = styled.button`
   }
 `;
 const Popup = () => {
-  const { repeatRound } = useSelector(state => ({
-    repeatRound: state.app.repeatRound || false
+  const { repeatRound, field } = useSelector(state => ({
+    repeatRound: state.app.repeatRound || false,
+    field: state.gameState.field
   }));
   const [message, setMessage] = useState("Еще раз");
   const dispatch = useDispatch();
@@ -52,9 +53,13 @@ const Popup = () => {
     let mes = repeatRound ? "Ожидание соперника" : "Еще раз";
     setMessage(mes);
   }, [repeatRound]);
+
   const handleReplyRound = () => {
+    const newRound = Object.values(field).every(
+      val => val.toString() === "false"
+    );
     setTimeout(() => {
-      dispatch(repeatRoundAction(true));
+      !newRound && dispatch(repeatRoundAction(true));
     }, 500);
   };
   return (

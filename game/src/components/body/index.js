@@ -33,7 +33,7 @@ const Body = () => {
     role: state.app.role || "",
     field: state.gameState.field || {},
     moveRole: state.gameState.moveRole || "",
-    winResult: state.app.winResult || false
+    winResult: state.gameState.winResult || {}
   }));
 
   return (
@@ -46,7 +46,9 @@ const Body = () => {
 
         <Field moveRole={moveRole} field={field} role={role} />
 
-        {winResult && <ResultLine winResult={winResult} role={role} />}
+        {winResult.winStatus && (
+          <ResultLine winResult={winResult} role={role} />
+        )}
       </Grid>
     </Wrapper>
   );

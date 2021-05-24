@@ -1,22 +1,21 @@
 import { getGameStateAction } from "../gameState";
-import { winResultAction } from "../appState/";
 import { useApiParams } from "../../../services/mongoService";
-import { winResult } from "../../../services/winResult";
 import { repeatRoundAction } from "../appState";
+import { mapGetGameData } from "../../../services/mapGetGameData";
+
 const gameStateMiddleware = store => next => action => {
   switch (action.type) {
     case "START_GAME": {
       const { getGameData } = useApiParams();
       const token = action.payload;
       setInterval(() => {
+        const { gameState } = store.getState();
         getGameData({ token }).then(res => {
-          const { gameState } = store.getState();
-          if (res && JSON.stringify(res.data) !== JSON.stringify(gameState)) {
-            if (res) {
-              store.dispatch(getGameStateAction(res));
-              let win = winResult(res.data.field);
-              win && store.dispatch(winResultAction(win));
-            }
+          if (
+            res &&
+            JSON.stringify(mapGetGameData(res)) !== JSON.stringify(gameState)
+          ) {
+            store.dispatch(getGameStateAction(res));
           }
         });
       }, 1000);
@@ -36,14 +35,13 @@ const gameStateMiddleware = store => next => action => {
       break;
     }
     case "GET_GAME_STATE": {
-      const { repeatRound, winResult } = store.getState().app;
+      const { repeatRound } = store.getState().app;
       const { data } = action.payload;
-      const newRound = Object.values(data.field).every(
-        val => val.toString() === "false"
-      );
+      const newRound =
+        data &&
+        Object.values(data.field).every(val => val.toString() === "false");
 
-      if (newRound && repeatRound && winResult) {
-        store.dispatch(winResultAction(false));
+      if (newRound && repeatRound) {
         store.dispatch(repeatRoundAction(false));
       }
 
