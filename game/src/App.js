@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Body from "./components/body";
 import Status from "./components/status";
 import Restart from "./components/restart";
+import Score from "./components/score";
 
 const Wrapper = styled.div`
   position: relative;
@@ -27,6 +28,7 @@ const App = () => {
   return (
     <Wrapper>
       <Container size={size}>
+        <Score />
         <Status />
         <Body />
         <Restart />

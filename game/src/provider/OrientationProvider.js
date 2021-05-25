@@ -11,10 +11,10 @@ const OrientationProvider = (props: Props) => {
   const dispatch = useDispatch();
   const updateSize = () => {
     let result = 0;
-    if (window.innerWidth > window.innerHeight) {
-      result = window.innerHeight;
+    if (window.outerWidth > window.outerHeight) {
+      result = window.outerHeight;
     } else {
-      result = window.innerWidth;
+      result = window.outerWidth;
     }
     dispatch(setSizeAction({ width: result }));
   };

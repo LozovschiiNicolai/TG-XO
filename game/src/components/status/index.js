@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { StatusText } from "./commonStatus/";
 
 const Wrapper = styled.div`
-  height: 15%;
+  height: 10%;
   display: flex;
   align-items: center;
 `;
