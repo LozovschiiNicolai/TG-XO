@@ -1,6 +1,10 @@
 import { getGameStateAction } from "../gameState";
 import { useApiParams } from "../../../services/mongoService";
-import { repeatRoundAction } from "../appState";
+import {
+  repeatRoundAction,
+  changeLoaderAction,
+  statusLoaderAction
+} from "../appState";
 import { mapGetGameData } from "../../../services/mapGetGameData";
 
 const gameStateMiddleware = store => next => action => {
@@ -35,16 +39,26 @@ const gameStateMiddleware = store => next => action => {
       break;
     }
     case "GET_GAME_STATE": {
-      const { repeatRound } = store.getState().app;
-      const { data } = action.payload;
+      const { repeatRound, loader } = store.getState().app;
+      const { data, gameScore } = action.payload;
       const newRound =
         data &&
         Object.values(data.field).every(val => val.toString() === "false");
 
       if (newRound && repeatRound) {
         store.dispatch(repeatRoundAction(false));
+        store.dispatch(statusLoaderAction(true));
+        setTimeout(() => {
+          store.dispatch(statusLoaderAction(false));
+        }, 2000);
       }
-
+      if (loader.length) {
+        if (gameScore.master && !gameScore.guest) {
+          store.dispatch(changeLoaderAction("Ожидание соперника"));
+        } else if (gameScore.master && gameScore.guest) {
+          store.dispatch(changeLoaderAction(""));
+        }
+      }
       break;
     }
     default:

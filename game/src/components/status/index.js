@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { StatusText } from "./commonStatus/";
+import { Spinner } from "../loader/commonLoader/";
 
 const Wrapper = styled.div`
   height: 10%;
@@ -10,10 +11,11 @@ const Wrapper = styled.div`
 `;
 
 const Status = () => {
-  const { role, moveRole, winResult } = useSelector(state => ({
+  const { role, moveRole, winResult, statusLoader } = useSelector(state => ({
     role: state.app.role || "",
     moveRole: state.gameState.moveRole || "",
-    winResult: state.gameState.winResult || false
+    winResult: state.gameState.winResult || false,
+    statusLoader: state.app.statusLoader || false
   }));
   const [status, setStatus] = useState("");
 
@@ -34,9 +36,10 @@ const Status = () => {
     }
     setStatus(res);
   }, [winResult, role, moveRole]);
+
   return (
     <Wrapper>
-      <StatusText>{status}</StatusText>
+      {statusLoader ? <Spinner /> : <StatusText>{status}</StatusText>}
     </Wrapper>
   );
 };

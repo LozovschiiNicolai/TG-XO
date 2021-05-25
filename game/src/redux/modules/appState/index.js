@@ -5,13 +5,17 @@ const ADD_ROLE = "ADD_ROLE";
 const WIN_RESULT = "WIN_RESULT";
 const REPEAT_ROUND = "REPEAT_ROUND";
 const SET_SIZE = "SET_SIZE";
+const CHANGE_LOADER = "CHANGE_LOADER";
+const STATUS_LOADER = "STATUS_LOADER";
 
 export type Action =
   | { type: typeof GET_URL_PARAMS, payload: Object }
   | { type: typeof ADD_ROLE, payload: Object }
   | { type: typeof WIN_RESULT }
   | { type: typeof REPEAT_ROUND }
-  | { type: typeof SET_SIZE, payload: Object };
+  | { type: typeof SET_SIZE, payload: Object }
+  | { type: typeof CHANGE_LOADER, payload: String }
+  | { type: typeof STATUS_LOADER, payload: boolean };
 
 export type State = {
   token: String,
@@ -19,7 +23,9 @@ export type State = {
   role: String,
   repeatRound: boolean,
   size: Object,
-  gameScore: Object
+  gameScore: Object,
+  loader: String,
+  statusLoader: boolean
 };
 
 const initialState: State = {
@@ -27,7 +33,9 @@ const initialState: State = {
   user: "",
   role: "",
   repeatRound: false,
-  size: {}
+  size: {},
+  loader: "Загрузка",
+  statusLoader: false
 };
 
 export default function reducer(
@@ -60,6 +68,18 @@ export default function reducer(
         size: action.payload
       };
     }
+    case CHANGE_LOADER: {
+      return {
+        ...state,
+        loader: action.payload
+      };
+    }
+    case STATUS_LOADER: {
+      return {
+        ...state,
+        statusLoader: action.payload
+      };
+    }
     default: {
       return state;
     }
@@ -83,5 +103,15 @@ export const repeatRoundAction = (payload: boolean): Action => ({
 
 export const setSizeAction = (payload: Object): Action => ({
   type: SET_SIZE,
+  payload
+});
+
+export const changeLoaderAction = (payload: String): Action => ({
+  type: CHANGE_LOADER,
+  payload
+});
+
+export const statusLoaderAction = (payload: boolean): Action => ({
+  type: STATUS_LOADER,
   payload
 });
