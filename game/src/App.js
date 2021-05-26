@@ -21,7 +21,7 @@ const Container = styled.div`
   height: 100vh;
   margin: auto;
   min-width: 300px;
-  width: ${({ size }) => (size ? `${size.width}px` : `100vw`)};
+  width: 100%;
 `;
 const App = () => {
   const { size, loader } = useSelector(state => ({
