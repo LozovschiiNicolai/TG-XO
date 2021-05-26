@@ -5,7 +5,7 @@ import Body from "./components/body";
 import Status from "./components/status";
 import Restart from "./components/restart";
 import Score from "./components/score";
-//import Loader from "./components//loader";
+import Loader from "./components//loader";
 
 const Wrapper = styled.div`
   position: relative;
@@ -20,25 +20,26 @@ const Container = styled.div`
   justify-content: space-around;
   height: 100vh;
   margin: auto;
-  width: ${({ size }) => (size ? `${size.width}px` : `100%`)};
+  min-width: 300px;
+  width: ${({ size }) => (size ? `${size.width}px` : `100vw`)};
 `;
 const App = () => {
-  const { size } = useSelector(state => ({
-    size: state.app.size || {}
-    // loader: state.app.loader || ""
+  const { size, loader } = useSelector(state => ({
+    size: state.app.size || {},
+    loader: state.app.loader || ""
   }));
   return (
     <Wrapper>
-      {/* {loader.length ? (
+      {loader.length ? (
         <Loader />
-      ) : ( */}
-      <Container size={size}>
-        <Score />
-        <Status />
-        <Body />
-        <Restart />
-      </Container>
-      {/* )} */}
+      ) : (
+        <Container size={size}>
+          <Score />
+          <Status />
+          <Body />
+          <Restart />
+        </Container>
+      )}
     </Wrapper>
   );
 };
