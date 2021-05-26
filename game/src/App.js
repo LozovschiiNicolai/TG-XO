@@ -5,7 +5,7 @@ import Body from "./components/body";
 import Status from "./components/status";
 import Restart from "./components/restart";
 import Score from "./components/score";
-import Loader from "./components//loader";
+//import Loader from "./components//loader";
 
 const Wrapper = styled.div`
   position: relative;
@@ -23,22 +23,22 @@ const Container = styled.div`
   width: ${({ size }) => (size ? `${size.width}px` : `100%`)};
 `;
 const App = () => {
-  const { size, loader } = useSelector(state => ({
-    size: state.app.size || {},
-    loader: state.app.loader || ""
+  const { size } = useSelector(state => ({
+    size: state.app.size || {}
+    // loader: state.app.loader || ""
   }));
   return (
     <Wrapper>
-      {loader.length ? (
+      {/* {loader.length ? (
         <Loader />
-      ) : (
-        <Container size={size}>
-          <Score />
-          <Status />
-          <Body />
-          <Restart />
-        </Container>
-      )}
+      ) : ( */}
+      <Container size={size}>
+        <Score />
+        <Status />
+        <Body />
+        <Restart />
+      </Container>
+      {/* )} */}
     </Wrapper>
   );
 };
