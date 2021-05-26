@@ -14,12 +14,9 @@ const fadeIn = keyframes`
 `;
 const Wrapper = styled.div`
   width: 90%;
-  height: 60%;
 `;
 
 const Grid = styled.svg`
-  width: 100%;
-  height: 100%;
   & g svg {
     animation: 0.5s ${fadeIn} ease-out;
   }
