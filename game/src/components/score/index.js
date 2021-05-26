@@ -19,7 +19,7 @@ const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 7em;
+  width: 8em;
   &:last-of-type {
     flex-direction: row-reverse;
     margin-left: 5%;

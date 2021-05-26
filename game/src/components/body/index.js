@@ -14,7 +14,7 @@ const fadeIn = keyframes`
 `;
 const Wrapper = styled.div`
   width: 90%;
-  height: 50%;
+  height: 60%;
 `;
 
 const Grid = styled.svg`
@@ -36,50 +36,18 @@ const Body = () => {
   return (
     <Wrapper>
       <Grid viewBox="0 0 99 99">
-        <defs>
-          <filter id="landscape" x="0" y="0" width="200%" height="200%">
-            <feOffset result="offOut" in="SourceAlpha" dx="0" dy="1" />
-            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
-            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-          </filter>
-          <filter id="portrait" x="0" y="0" width="200%" height="200%">
-            <feOffset result="offOut" in="SourceAlpha" dx="1" dy="0" />
-            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="2" />
-            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
-          </filter>
-        </defs>
-        <rect
-          filter="url(#landscape)"
-          x="0"
-          y="33"
-          width="99"
-          height="1"
-          fill="#2d9cdb"
-        />
-        <rect
-          filter="url(#landscape)"
-          x="0"
-          y="66"
-          width="99"
-          height="1"
-          fill="#2d9cdb"
-        />
-        <rect
-          filter="url(#portrait)"
-          x="33"
-          y="0"
-          width="1"
-          height="99"
-          fill="#2d9cdb"
-        />
-        <rect
-          filter="url(#portrait)"
-          x="66"
-          y="0"
-          width="1"
-          height="99"
-          fill="#2d9cdb"
-        />
+        <g>
+          <rect x="0" y="33" width="99" height="2" fill="rgba(0, 0, 0, 0.1)" />
+          <rect x="0" y="66" width="99" height="2" fill="rgba(0, 0, 0, 0.1)" />
+          <rect x="33" y="0" width="2" height="99" fill="rgba(0, 0, 0, 0.1)" />
+          <rect x="66" y="0" width="2" height="99" fill="rgba(0, 0, 0, 0.1)" />
+        </g>
+        <g>
+          <rect x="0" y="33" width="99" height="1" fill="#2d9cdb" />
+          <rect x="0" y="66" width="99" height="1" fill="#2d9cdb" />
+          <rect x="33" y="0" width="1" height="99" fill="#2d9cdb" />
+          <rect x="66" y="0" width="1" height="99" fill="#2d9cdb" />
+        </g>
 
         <Field moveRole={moveRole} field={field} role={role} />
 
