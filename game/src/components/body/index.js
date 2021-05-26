@@ -14,7 +14,7 @@ const fadeIn = keyframes`
 `;
 const Wrapper = styled.div`
   display: flex;
-  width: 100vw;
+  width: auto;
   max-width: 90%;
   height: 50%;
 `;

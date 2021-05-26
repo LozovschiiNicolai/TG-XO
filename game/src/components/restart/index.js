@@ -6,6 +6,8 @@ import { StatusText } from "../status/commonStatus/";
 
 const Wrapper = styled.div`
   height: 15%;
+  width: 300px;
+  position: relative;
   display: flex;
   align-items: center;
   margin: 2.5% 0;
