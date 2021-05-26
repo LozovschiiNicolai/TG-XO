@@ -13,10 +13,14 @@ const fadeIn = keyframes`
   }
 `;
 const Wrapper = styled.div`
+  display: flex;
   width: 90%;
+  max-height: 50%;
 `;
 
 const Grid = styled.svg`
+  height: 100%;
+  width: 100%;
   & g svg {
     animation: 0.5s ${fadeIn} ease-out;
   }
