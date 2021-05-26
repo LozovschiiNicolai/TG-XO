@@ -20,7 +20,7 @@ const Container = styled.div`
   justify-content: space-around;
   height: 100vh;
   margin: auto;
-  width: ${({ size }) => (size ? `${size.width}px` : `100%`)};
+  width: 100vw;
 `;
 const App = () => {
   const { size, loader } = useSelector(state => ({

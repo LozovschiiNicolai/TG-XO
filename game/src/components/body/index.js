@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   display: flex;
   width: auto;
   max-width: 90%;
-  max-height: 50%;
+  height: 50%;
 `;
 
 const Grid = styled.svg`
