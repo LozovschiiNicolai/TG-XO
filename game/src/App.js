@@ -19,8 +19,8 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 100vh;
-  width: 100vw;
+  height: 500px;
+  width: 500px;
 `;
 const App = () => {
   const { size, loader } = useSelector(state => ({
