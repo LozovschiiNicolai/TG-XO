@@ -14,13 +14,13 @@ const Wrapper = styled.div`
   background: linear-gradient(345.45deg, #bb6bd9 0%, #2f80ed 100%);
 `;
 const Container = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   height: 100vh;
-  margin: auto;
-  width: ${({ size }) => (size ? `${size.width}px` : `100vw`)};
+  width: 100vw;
 `;
 const App = () => {
   const { size, loader } = useSelector(state => ({
