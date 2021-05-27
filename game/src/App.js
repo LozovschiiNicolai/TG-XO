@@ -23,8 +23,7 @@ const Container = styled.div`
   width: 100vw;
 `;
 const App = () => {
-  const { size, loader } = useSelector(state => ({
-    size: state.app.size || {},
+  const { loader } = useSelector(state => ({
     loader: state.app.loader || ""
   }));
   return (
@@ -32,7 +31,7 @@ const App = () => {
       {loader.length ? (
         <Loader />
       ) : (
-        <Container size={size}>
+        <Container>
           <Score />
           <Status />
           <Body />
