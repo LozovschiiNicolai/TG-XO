@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { StatusText } from "../status/commonStatus";
 
 const Wrapper = styled.div`
+  position: relative;
   height: 10%;
   margin-top: 2.5%;
   width: 90%;
@@ -53,6 +54,9 @@ const Name = styled.div`
 `;
 const Symbol = styled(StatusText)`
   position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 const Score = () => {
   const { gameScore } = useSelector(state => ({
